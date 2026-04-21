@@ -1,0 +1,7 @@
+{
+    "dependencies": ["."],
+    "graphs": {
+        "Brewmaster": "./agents/orchestrator.py:orchestrator"
+    },
+    "env": "./.env"
+}
