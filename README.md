@@ -171,6 +171,23 @@ uv run python evals/eval_rag.py             # RAG agent — RAGAS metrics (~2-3m
 
 Results are saved to `evals/results/` as timestamped JSON files.
 
+### RAG Tuning History
+
+| Run   | What changed              | Faithfulness | Ans Relevancy | Ctx Precision | Ctx Recall |
+|-------|---------------------------|:------------:|:-------------:|:-------------:|:----------:|
+| 20:11 | baseline (default prompt) | 0.831        | 0.724         | 0.875         | 0.813      |
+| 20:24 | temp=0                    | 0.893        | 0.682         | 0.896         | 0.813      |
+| 21:50 | k=5                       | 0.864        | 0.682         | 0.857         | 0.938      |
+| 21:55 | k=5 (rerun)               | 0.883        | 0.662         | 0.858         | 1.000      |
+| 22:00 | strict prompt             | 0.921        | 0.555         | 0.858         | 0.938      |
+| 22:04 | stricter prompt           | 0.944        | 0.513         | 0.858         | 0.938      |
+| 22:11 | chunk 1200 / overlap 150  | 0.913        | 0.566         | 0.927         | 0.750      |
+| 22:18 | temp=0.1, k=3             | 0.892        | 0.719         | 0.917         | 0.750      |
+| 22:21 | **temp=0.1, k=4** ✓       | 0.833        | 0.712         | 0.896         | 0.938      |
+| 22:27 | temp=0, k=4               | 0.863        | 0.620         | 0.913         | 1.000      |
+
+Final config: `temp=0.1`, `k=4`, `chunk_size=1200`, `chunk_overlap=150`.
+
 ---
 
 ## Rebuilding data

@@ -13,8 +13,8 @@ URLS = [
 ]
 
 splitter = RecursiveCharacterTextSplitter(
-    chunk_size=800,
-    chunk_overlap=100,
+    chunk_size=1200,
+    chunk_overlap=150,
     add_start_index=True,
 )
 
@@ -40,14 +40,18 @@ else:
 @tool
 def search_docs(query: str) -> str:
     """Search Bees-Brewery-Pipeline documentation reference."""
-    results = vector_store.similarity_search(query, k=3)
+    results = vector_store.similarity_search(query, k=4)
     return '\n\n---\n\n'.join(
         f"[{r.metadata['source']}]\n{r.page_content}" for r in results
     )
 
 rag_agent = create_agent(
-    model=ChatOpenAI(model=RAG_MODEL, temperature=0),
+    model=ChatOpenAI(model=RAG_MODEL, temperature=0.1),
     tools=[search_docs],
-    system_prompt="You are a helpful assistant that answers questions about the Bees-Brewery-Pipeline project. Always search the docs before answering.",
+    system_prompt=(
+        "You are a technical assistant for the Bees-Brewery-Pipeline project. "
+        "Always search the docs before answering. "
+        "Give a complete, direct answer to the question. "
+    ),
 )
 
