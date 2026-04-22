@@ -21,7 +21,7 @@ Built on the [Bees-Brewery-Pipeline](https://github.com/Coutinho306/Bees-Brewery
 
 ```bash
 git clone https://github.com/Coutinho306/brewmaster
-cd brewmaster
+cd Brewmaster
 ```
 
 ### 2. Run setup
