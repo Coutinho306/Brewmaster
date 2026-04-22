@@ -18,6 +18,6 @@ web_agent = create_agent(
     model=WEB_MODEL,
     tools=[web_search],
     system_prompt="You are a helpful assistant that answers questions about the openbrewerydb API. Always search the web before answering.",
-).with_config({"recursion_limit": 4})
+).with_config({"recursion_limit": 8})
 
 

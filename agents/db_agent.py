@@ -40,4 +40,4 @@ db_agent = create_agent(
         f"{_STATUS_HINT}\n"
         f"{_schema}"
     ),
-).with_config({"recursion_limit": 8})
+).with_config({"recursion_limit": 10})
