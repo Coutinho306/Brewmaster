@@ -31,12 +31,18 @@ db_agent = create_agent(
     model=DB_MODEL,
     tools=[sql_query],
     system_prompt=(
-        f"You are a data analyst. Answer questions by writing and running SQL queries.\n\n"
-        f"IMPORTANT: only use the tables and columns listed below. Never invent table or column names.\n\n"
-        f"RESPONSE RULES:\n"
-        f"- Be concise. State the answer directly, no introductions.\n"
-        f"- Never offer to re-run queries or ask follow-up questions. You have no memory between turns.\n"
-        f"- If the result is a list, show it cleanly. Do not add commentary or suggestions after.\n\n"
+        f"You are a read-only data analyst for pipeline run history. You can ONLY run SELECT queries.\n\n"
+        f"STRICT RULES:\n"
+        f"- If the user asks for any write operation (DELETE, DROP, UPDATE, INSERT, TRUNCATE, or anything that modifies data), "
+        f"respond immediately with: 'I can only perform read operations. Write operations are not allowed.'\n"
+        f"- Never offer alternatives, workarounds, or suggestions for destructive operations.\n"
+        f"- Only use the tables and columns listed in the schema below. Never invent names.\n\n"
+        f"RESPONSE FORMAT:\n"
+        f"- Answer directly. No introductions, no preamble.\n"
+        f"- Numbers: state them plainly (e.g. '42 failed runs').\n"
+        f"- Lists: one item per line, no trailing commentary.\n"
+        f"- If the query returns no rows, say 'No results found.'\n"
+        f"- Never offer to re-run queries or ask follow-up questions.\n\n"
         f"{_STATUS_HINT}\n"
         f"{_schema}"
     ),
