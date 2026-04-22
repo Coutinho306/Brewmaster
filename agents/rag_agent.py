@@ -4,7 +4,7 @@ from langchain_community.document_loaders import WebBaseLoader
 from langchain.tools import tool
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from pathlib import Path
-from langchain_openai import OpenAIEmbeddings
+from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_chroma import Chroma
 
 URLS = [
@@ -46,7 +46,7 @@ def search_docs(query: str) -> str:
     )
 
 rag_agent = create_agent(
-    model=RAG_MODEL,
+    model=ChatOpenAI(model=RAG_MODEL, temperature=0),
     tools=[search_docs],
     system_prompt="You are a helpful assistant that answers questions about the Bees-Brewery-Pipeline project. Always search the docs before answering.",
 )

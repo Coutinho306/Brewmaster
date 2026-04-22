@@ -15,11 +15,14 @@ wheels/
 # LangGraph runtime state (may contain conversation history)
 .langgraph_api/
 
-# ChromaDB (embedded vectors — rebuild with core/ingest_docs.py)
+# ChromaDB (embedded vectors — rebuilt automatically on first run)
 data/chroma/
 
 # SQLite DB (rebuild with data/seed_database.py)
 data/database/
+
+# Test cache
+.pytest_cache/
 
 # Jupyter checkpoints
 .ipynb_checkpoints/
@@ -29,6 +32,9 @@ data/database/
 
 # Runtime
 .brewmaster.pids
+
+# Eval results
+evals/results/*.json
 
 # OS / editor
 .DS_Store
