@@ -5,6 +5,25 @@ unset VIRTUAL_ENV
 
 echo "=== Brewmaster Setup ==="
 
+# ── 0. OS check ────────────────────────────────────────────────────────────────
+OS="$(uname -s 2>/dev/null || echo "Windows")"
+if [[ "$OS" == "Darwin" ]]; then
+  echo ""
+  echo "  ⚠  macOS detected."
+  echo "  This script was developed for Linux and may not run correctly."
+  echo "  Please follow the macOS setup tutorial in README.md instead."
+  echo ""
+  exit 1
+fi
+if [[ "$OS" == "Windows"* ]] || [[ "$OS" == "MINGW"* ]] || [[ "$OS" == "MSYS"* ]] || [[ "$OS" == "CYGWIN"* ]]; then
+  echo ""
+  echo "  ⚠  Windows detected."
+  echo "  This script was developed for Linux and may not run correctly."
+  echo "  Please follow the Windows setup tutorial in README.md instead."
+  echo ""
+  exit 1
+fi
+
 # ── 1. Check .env ──────────────────────────────────────────────────────────────
 if [ ! -f ".env" ]; then
   cp .env.example .env
@@ -63,7 +82,7 @@ fi
 echo "[3/3] Installing UI dependencies..."
 cd agent-chat-ui
 if [ ! -d "node_modules" ]; then
-  npm install --silent
+  pnpm install --silent
 else
   echo "      node_modules already present — skipping"
 fi
@@ -86,7 +105,7 @@ sleep 5
 
 # Agent Chat UI
 cd agent-chat-ui
-nohup npm run dev > ../ui.log 2>&1 &
+nohup pnpm dev > ../ui.log 2>&1 &
 UI_PID=$!
 disown $UI_PID
 cd ..

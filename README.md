@@ -15,6 +15,8 @@ Built on the [Bees-Brewery-Pipeline](https://github.com/Coutinho306/Bees-Brewery
 
 ## Quickstart
 
+> `setup.sh` works on **Linux and WSL 2**. If you are on macOS or native Windows (Git Bash), skip to the [macOS tutorial](#macos-setup) or [Windows tutorial](#windows-setup) below.
+
 ### 1. Clone
 
 ```bash
@@ -187,6 +189,152 @@ Results are saved to `evals/results/` as timestamped JSON files.
 | 22:27 | temp=0, k=4               | 0.863        | 0.620         | 0.913         | 1.000      |
 
 Final config: `temp=0.1`, `k=4`, `chunk_size=1200`, `chunk_overlap=150`.
+
+---
+
+## macOS Setup
+
+> `setup.sh` is Linux-only. Follow these steps manually on macOS.
+
+### Prerequisites
+
+```bash
+# Install Homebrew if you don't have it
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Install uv (Python package manager)
+brew install uv
+
+# Install Node.js + pnpm
+brew install node
+npm install -g pnpm
+```
+
+### Steps
+
+**1. Clone the repo**
+
+```bash
+git clone https://github.com/Coutinho306/brewmaster
+cd brewmaster
+```
+
+**2. Create your `.env`**
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` and fill in your API keys (`OPENAI_API_KEY`, `TAVILY_API_KEY`).
+
+**3. Install Python dependencies**
+
+```bash
+uv sync
+```
+
+**4. Seed the database**
+
+```bash
+uv run python data/seed_database.py
+```
+
+**5. Install UI dependencies**
+
+```bash
+cd agent-chat-ui
+pnpm install
+cd ..
+```
+
+**6. Start the LangGraph server** (in one terminal)
+
+```bash
+uv run langgraph dev --no-browser
+```
+
+**7. Start the chat UI** (in a second terminal)
+
+```bash
+cd agent-chat-ui
+pnpm dev
+```
+
+**8. Open Brewmaster**
+
+- Chat UI → http://localhost:3000
+- LangGraph API → http://localhost:2024
+
+**To stop:** press `Ctrl+C` in both terminals.
+
+---
+
+## Windows Setup
+
+> Git Bash does not support `nohup` or `fuser`. You will need to run the two servers in separate terminals.
+
+**1. Install prerequisites**
+
+- [Python 3.12+](https://www.python.org/downloads/)
+- [uv](https://docs.astral.sh/uv/getting-started/installation/) — `pip install uv`
+- [Node.js 20+](https://nodejs.org/)
+- [pnpm](https://pnpm.io/installation) — `npm install -g pnpm`
+- [Git Bash](https://git-scm.com/downloads)
+
+**2. Clone the repo**
+
+```bash
+git clone https://github.com/Coutinho306/brewmaster
+cd brewmaster
+```
+
+**3. Create your `.env`**
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` and fill in your API keys.
+
+**4. Install Python dependencies**
+
+```bash
+uv sync
+```
+
+**5. Seed the database**
+
+```bash
+uv run python data/seed_database.py
+```
+
+**6. Install UI dependencies**
+
+```bash
+cd agent-chat-ui
+pnpm install
+cd ..
+```
+
+**7. Start the LangGraph server** (Terminal 1)
+
+```bash
+uv run langgraph dev --no-browser
+```
+
+**8. Start the chat UI** (Terminal 2)
+
+```bash
+cd agent-chat-ui
+pnpm dev
+```
+
+**9. Open Brewmaster**
+
+- Chat UI → http://localhost:3000
+- LangGraph API → http://localhost:2024
+
+**To stop:** press `Ctrl+C` in both terminals.
 
 ---
 
