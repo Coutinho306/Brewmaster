@@ -167,13 +167,21 @@ Pipeline names, layers, and failure modes mirror the real Bees project exactly �
 ## Evaluation
 
 ```bash
-uv run pytest evals/test_db_agent.py -v     # DB agent — SQL correctness + SELECT guard (~30s)
-uv run python evals/eval_rag.py             # RAG agent — RAGAS metrics (~2-3min)
+# Run all
+uv run pytest evals/ -v && uv run python evals/eval_rag.py
+
+# Individual
+uv run pytest evals/test_db_agent.py -v       # DB agent — SQL correctness + SELECT guard (~30s)
+uv run pytest evals/test_orchestrator.py -v   # Orchestrator — routing + refusal rules (~30s)
+uv run pytest evals/test_web_agent.py -v      # Web agent — search tool + response (~30s)
+uv run python evals/eval_rag.py               # RAG agent — RAGAS metrics (~2-3min)
 ```
 
 Results are saved to `evals/results/` as timestamped JSON files.
 
 ### RAG Tuning History
+
+**Apr 21**
 
 | Run   | What changed              | Faithfulness | Ans Relevancy | Ctx Precision | Ctx Recall |
 |-------|---------------------------|:------------:|:-------------:|:-------------:|:----------:|
@@ -185,10 +193,27 @@ Results are saved to `evals/results/` as timestamped JSON files.
 | 22:04 | stricter prompt           | 0.944        | 0.513         | 0.858         | 0.938      |
 | 22:11 | chunk 1200 / overlap 150  | 0.913        | 0.566         | 0.927         | 0.750      |
 | 22:18 | temp=0.1, k=3             | 0.892        | 0.719         | 0.917         | 0.750      |
-| 22:21 | **temp=0.1, k=4** ✓       | 0.833        | 0.712         | 0.896         | 0.938      |
+| 22:21 | temp=0.1, k=4             | 0.833        | 0.712         | 0.896         | 0.938      |
 | 22:27 | temp=0, k=4               | 0.863        | 0.620         | 0.913         | 1.000      |
 
-Final config: `temp=0.1`, `k=4`, `chunk_size=1200`, `chunk_overlap=150`.
+**Apr 22**
+
+| Run   | What changed                                    | Faithfulness | Ans Relevancy | Ctx Precision | Ctx Recall |
+|-------|-------------------------------------------------|:------------:|:-------------:|:-------------:|:----------:|
+| 19:59 | prompt changes                                  | 0.911        | 0.688         | 0.913         | 1.000      |
+| 20:05 | k=4                                             | 0.774        | 0.687         | 0.927         | 0.812      |
+| 20:11 | k=4 (rerun)                                     | 0.888        | 0.713         | 0.913         | 1.000      |
+| 20:16 | chunk 1000 / overlap 150                        | 0.926        | 0.683         | 0.917         | 0.938      |
+| 20:20 | chunk 600 / overlap 50                          | 0.837        | 0.620         | 0.872         | 0.938      |
+| 20:24 | chunk 1600 / overlap 300                        | 0.965        | 0.650         | 0.976         | 0.938      |
+| 20:27 | chunk 1200 / overlap 150                        | 0.884        | 0.633         | 0.913         | 0.875      |
+| 20:31 | k=4, temp=0                                     | 0.972        | 0.640         | 0.913         | 0.750      |
+| 20:36 | chunk 250 / overlap 25, k=3, temp=0.1           | 0.630        | 0.561         | 0.719         | 0.688      |
+| 20:41 | separators, chunk 1300 / overlap 200            | 0.926        | 0.662         | 0.865         | 0.938      |
+| 20:50 | separators, chunk 1600 / overlap 300, k=2       | 0.769        | 0.552         | 1.000         | 0.750      |
+| 20:55 | **separators, chunk 1600 / overlap 300, k=3** ✓ | 0.808        | 0.739         | 0.979         | 0.938      |
+
+Final config: `temp=0.1`, `k=3`, `chunk_size=1600`, `chunk_overlap=300`, custom markdown separators.
 
 ---
 

@@ -40,7 +40,7 @@ class TestRoutesToRag:
 
 class TestRoutesToDb:
     def test_pipeline_count_question(self):
-        answer = ask("How many pipelines are there?")
+        answer = ask("How many distinct pipelines are recorded in the database?")
         assert "8" in answer
 
     def test_failure_question(self):

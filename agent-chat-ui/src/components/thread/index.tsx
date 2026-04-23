@@ -122,7 +122,7 @@ export function Thread() {
   );
   const [hideToolCalls, setHideToolCalls] = useQueryState(
     "hideToolCalls",
-    parseAsBoolean.withDefault(false),
+    parseAsBoolean.withDefault(true),
   );
   const [input, setInput] = useState("");
   const {
@@ -293,7 +293,6 @@ export function Thread() {
             "relative flex min-w-0 flex-1 flex-col overflow-hidden",
             !chatStarted && "grid-rows-[1fr]",
           )}
-          layout={isLargeScreen}
           animate={{
             marginLeft: chatHistoryOpen ? (isLargeScreen ? 300 : 0) : 0,
             width: chatHistoryOpen
@@ -398,6 +397,13 @@ export function Thread() {
                 <>
                   {messages
                     .filter((m) => !m.id?.startsWith(DO_NOT_RENDER_ID_PREFIX))
+                    .filter((m) => {
+                      if (m.type !== "ai") return true;
+                      const hasText = typeof m.content === "string"
+                        ? m.content.length > 0
+                        : (m.content as any[])?.some((c: any) => c.type === "text" && c.text?.length > 0);
+                      return hasText;
+                    })
                     .map((message, index) =>
                       message.type === "human" ? (
                         <HumanMessage

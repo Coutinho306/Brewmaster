@@ -13,9 +13,10 @@ URLS = [
 ]
 
 splitter = RecursiveCharacterTextSplitter(
-    chunk_size=1200,
-    chunk_overlap=150,
+    chunk_size=1600,
+    chunk_overlap=300,
     add_start_index=True,
+    separators=["\n\n", "\n---\n", "\n# ", "\n## ", "\n### ", "\n", " ", ""],
 )
 
 embeddings = OpenAIEmbeddings(model='text-embedding-3-small')
@@ -40,7 +41,7 @@ else:
 @tool
 def search_docs(query: str) -> str:
     """Search Bees-Brewery-Pipeline documentation reference."""
-    results = vector_store.similarity_search(query, k=4)
+    results = vector_store.similarity_search(query, k=3)
     return '\n\n---\n\n'.join(
         f"[{r.metadata['source']}]\n{r.page_content}" for r in results
     )
