@@ -8,7 +8,9 @@ Ask questions about your data pipelines in plain English. Brewmaster routes your
 "Is the Open Brewery DB API down?"            →  Web Agent      (live search)
 "What is the difference between ETL and ELT?" →  Orchestrator   (direct answer)
 ```
+
 https://github.com/user-attachments/assets/ad795c8e-3cd6-43ed-a3d8-329023a6130d
+
 ---
 
 Built on the [Bees-Brewery-Pipeline](https://github.com/Coutinho306/Bees-Brewery-Pipeline) project — a real medallion architecture (Bronze → Silver → Gold) using Apache Airflow.
