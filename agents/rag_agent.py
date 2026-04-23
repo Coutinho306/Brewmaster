@@ -42,6 +42,8 @@ else:
 def search_docs(query: str) -> str:
     """Search Bees-Brewery-Pipeline documentation reference."""
     results = vector_store.similarity_search(query, k=3)
+    if not results:
+        return "No documentation found for this query." 
     return '\n\n---\n\n'.join(
         f"[{r.metadata['source']}]\n{r.page_content}" for r in results
     )
